@@ -69,7 +69,7 @@
 					cursorY = int.Parse(a[1]);
 				}, a => $"Placed cursor from ({cursorX2},{cursorY2}) to ({cursorX},{cursorY})"),
 				new("Delete", "del", (t,i,a) =>
-					flCont[cursorY].Remove(cursorX, int.Parse(a[0])),
+					flCont[cursorY] = flCont[cursorY].Remove(cursorX, int.Parse(a[0])),
 				a => $"Deleted {a[0]} chars at ({cursorX},{cursorY})"),
 			} },
 		};
