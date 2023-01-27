@@ -46,6 +46,7 @@
 	internal class Program
 	{
 		static string[] flCont = { };
+		static bool exit = false;
 		static Dictionary<string, BarItem[]> items = new()
 		{
 			{ "File", new BarItem[] {
@@ -56,6 +57,7 @@
 				}, a => "Made a new file"),
 				new("Save", "savefl", (t,i,a) => File.WriteAllLines(a[0], flCont), a => $"Saved to {a[0]}"),
 				new("Open", "openfl", (t,i,a) => flCont = File.ReadAllLines(a[0]), a => $"Read from {a[0]}"),
+				new("Quit", "quit", (t,i,a) => exit = true, a => ""),
 			} },
 			{ "Edit", new BarItem[] {
 				new("Insert", "ins", (t,i,a) =>
@@ -196,7 +198,7 @@
 			flCont[0] = "Welcome to SMiTE v" + Info.version + "!";
 			for (int i = 1; i < height; i++) flCont[i] = "";
 			
-			while (true)
+			while (!exit)
 			{
 				drawui(width, height);
 				Console.ResetColor();
