@@ -45,7 +45,7 @@
 
 	internal class Program
 	{
-		static string[] flCont = { "Welcome to SMiTE v" + Info.version + "!" };
+		static string[] flCont = { };
 		static Dictionary<string, BarItem[]> items = new()
 		{
 			{ "File", new BarItem[] {
@@ -54,16 +54,16 @@
 					flCont = new string[] {""};
 					cursorX = 0; cursorY = 0;
 				}, a => "Made a new file"),
-				new("Save", "savefl", (t,i,a) => File.WriteAllText(a[0], string.Join('\n', flCont)), a => $"Saved to {a[0]}"),
+				new("Save", "savefl", (t,i,a) => File.WriteAllLines(a[0], flCont), a => $"Saved to {a[0]}"),
 				new("Open", "openfl", (t,i,a) => flCont = File.ReadAllLines(a[0]), a => $"Read from {a[0]}"),
 			} },
 			{ "Edit", new BarItem[] {
 				new("Insert", "ins", (t,i,a) =>
 					flCont[cursorY] = flCont[cursorY].Insert(cursorX, string.Join(' ', a)),
-					a => $"Inserted \"{string.Join(' ', a)}\" at ({cursorX},{cursorY})"),
+					a => $"Inserted \"{string.Join(' ', a)}\" at ({cursorX},{cursorY})"),/*
 				new("Insert newline", "insnl", (t,i,a) =>
 					flCont.Append(""),
-					a => $"Inserted newline at EOF"),
+					a => $"Inserted newline at EOF"),*/
 				new("Place cursor", "pcur", (t,i,a) =>
 				{
 					cursorX = int.Parse(a[0]);
@@ -124,15 +124,34 @@
 						}
 
 						for (int j = ln[scrollX..].Length; j < w; j++)
+						{
+							if (cursorX - scrollX == j && cursorY - scrollY == y)
+								invertcolor();
+
 							Console.Write(' ');
+
+							if (cursorX - scrollX == j && cursorY - scrollY == y)
+								invertcolor();
+						}
+
+
 						Console.WriteLine();
 					}
+					y++;
 				}
 			}
 			for (int i = flCont.Length; i < h; i++)
 			{
 				for (int j = 0; j < w; j++)
+				{
+					if (cursorX - scrollX == j && cursorY - scrollY == i)
+						invertcolor();
+
 					Console.Write(' ');
+
+					if (cursorX - scrollX == j && cursorY - scrollY == i)
+						invertcolor();
+				}
 				Console.ResetColor();
 				Console.WriteLine();
 				resetcolor();
@@ -156,9 +175,16 @@
 		static void Main(string[] args)
 		{
 			string status = "\n";
+			int width = 120, height = 26;
+
+			flCont = new string[26];
+			flCont[0] = "Welcome to SMiTE v" + Info.version + "!";
+			for (int i = 1; i < flCont.Length; i++)
+				flCont[i] = "asdf";
+			
 			while (true)
 			{
-				drawui(120, 26);
+				drawui(width, height);
 				Console.ResetColor();
 				Console.WriteLine(status);
 				Console.Write('>');
