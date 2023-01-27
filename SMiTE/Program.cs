@@ -98,7 +98,6 @@
 		}
 		static void drawui(int w, int h)
 		{
-			Console.Clear();
 			drawbar(w);
 			resetcolor();
 			if (scrollY < flCont.Length)
@@ -107,9 +106,9 @@
 				foreach (string ln in flCont[scrollY..])
 				{
 					resetcolor();
-					if (scrollX <= ln.Length)
+					if (!string.IsNullOrWhiteSpace(ln))
 					{
-						if (!string.IsNullOrWhiteSpace(ln))
+						if (scrollX <= ln.Length)
 						{
 							int x = 0;
 							foreach (char c in ln[scrollX..])
@@ -136,13 +135,25 @@
 							if (cursorX - scrollX == j && cursorY - scrollY == y)
 								invertcolor();
 						}
-
-
-						Console.WriteLine();
 					}
+					else
+						for (int j = 0; j < w; j++)
+						{
+							if (cursorX - scrollX == j && cursorY - scrollY == y)
+								invertcolor();
+
+							Console.Write(' ');
+
+							if (cursorX - scrollX == j && cursorY - scrollY == y)
+								invertcolor();
+						}
+
+
+					Console.WriteLine();
 					y++;
 				}
 			}
+			resetcolor();
 			for (int i = flCont.Length; i < h; i++)
 			{
 				for (int j = 0; j < w; j++)
@@ -162,6 +173,7 @@
 		}
 		static void drawbar(int w)
 		{
+			Console.Clear();
 			Console.BackgroundColor = ConsoleColor.Cyan;
 			Console.ForegroundColor = ConsoleColor.Black;
 			int w2 = 0;
@@ -178,10 +190,11 @@
 		static void Main(string[] args)
 		{
 			string status = "\n";
-			int width = 120, height = 26;
+			int width = 80, height = 20;
 
 			flCont = new string[height];
 			flCont[0] = "Welcome to SMiTE v" + Info.version + "!";
+			for (int i = 1; i < height; i++) flCont[i] = "";
 			
 			while (true)
 			{
