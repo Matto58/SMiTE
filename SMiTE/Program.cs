@@ -180,7 +180,7 @@
 			flCont = new string[26];
 			flCont[0] = "Welcome to SMiTE v" + Info.version + "!";
 			for (int i = 1; i < flCont.Length; i++)
-				flCont[i] = "asdf";
+				flCont[i] = "";
 			
 			while (true)
 			{
