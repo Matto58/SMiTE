@@ -45,6 +45,7 @@
 
 	internal class Program
 	{
+		static string[] flCont = { "Welcome to SMiTE v" + Info.version + "!" };
 		static Dictionary<string, BarItem[]> items = new()
 		{
 			{ "File", new BarItem[] {
@@ -73,7 +74,6 @@
 				a => $"Deleted {a[0]} chars at ({cursorX},{cursorY})"),
 			} },
 		};
-		static string[] flCont = {"Welcome to SMiTE v" + Info.version + "!"};
 
 		static int scrollX = 0;
 		static int scrollY = 0;
