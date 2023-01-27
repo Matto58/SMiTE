@@ -107,20 +107,23 @@
 				foreach (string ln in flCont[scrollY..])
 				{
 					resetcolor();
-					if (scrollX < ln.Length)
+					if (scrollX <= ln.Length)
 					{
-						int x = 0;
-						foreach (char c in ln[scrollX..])
+						if (!string.IsNullOrWhiteSpace(ln))
 						{
-							if (cursorX - scrollX == x && cursorY - scrollY == y)
-								invertcolor();
-							
-							if (x < w)
-								Console.Write(c);
+							int x = 0;
+							foreach (char c in ln[scrollX..])
+							{
+								if (cursorX - scrollX == x && cursorY - scrollY == y)
+									invertcolor();
 
-							if (cursorX - scrollX == x && cursorY - scrollY == y)
-								invertcolor();
-							x++;
+								if (x < w)
+									Console.Write(c);
+
+								if (cursorX - scrollX == x && cursorY - scrollY == y)
+									invertcolor();
+								x++;
+							}
 						}
 
 						for (int j = ln[scrollX..].Length; j < w; j++)
@@ -177,10 +180,8 @@
 			string status = "\n";
 			int width = 120, height = 26;
 
-			flCont = new string[26];
+			flCont = new string[height];
 			flCont[0] = "Welcome to SMiTE v" + Info.version + "!";
-			for (int i = 1; i < flCont.Length; i++)
-				flCont[i] = "";
 			
 			while (true)
 			{
