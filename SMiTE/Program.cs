@@ -45,23 +45,27 @@
 
 	internal class Program
 	{
-		static string[] flCont = { };
+		static List<string> flCont = new();
 		static bool exit = false;
 		static Dictionary<string, BarItem[]> items = new()
 		{
 			{ "File", new BarItem[] {
 				new("New", "newfl", (t,i,a) =>
 				{
-					flCont = new string[] {""};
+					flCont = new();
 					cursorX = 0; cursorY = 0;
 				}, a => "Made a new file"),
 				new("Save", "savefl", (t,i,a) => File.WriteAllLines(a[0], flCont), a => $"Saved to {a[0]}"),
-				new("Open", "openfl", (t,i,a) => flCont = File.ReadAllLines(a[0]), a => $"Read from {a[0]}"),
+				new("Open", "openfl", (t,i,a) => flCont = File.ReadAllLines(a[0]).ToList(), a => $"Read from {a[0]}"),
 				new("Quit", "quit", (t,i,a) => exit = true, a => ""),
 			} },
 			{ "Edit", new BarItem[] {
 				new("Insert", "ins", (t,i,a) =>
-					flCont[cursorY] = flCont[cursorY].Insert(cursorX, string.Join(' ', a)),
+					{
+						do { flCont.Add(""); } while (cursorY >= flCont.Count);
+						do { flCont[cursorY] += " "; } while (cursorX >= flCont[cursorY].Length);
+						flCont[cursorY] = flCont[cursorY].Insert(cursorX, string.Join(' ', a));
+					},
 					a => $"Inserted \"{string.Join(' ', a)}\" at ({cursorX},{cursorY})"),/*
 				new("Insert newline", "insnl", (t,i,a) =>
 					flCont.Append(""),
@@ -129,11 +133,12 @@
 			Console.Clear();
 			if (showBar) drawbar(w);
 			resetcolor();
-			if (scrollY < flCont.Length)
+			if (scrollY < flCont.Count)
 			{
 				int y = 0;
-				foreach (string ln in flCont[scrollY..])
+				for (int inx = scrollY; inx < flCont.Count; inx++)
 				{
+					string ln = flCont[inx];
 					resetcolor();
 					if (!string.IsNullOrWhiteSpace(ln))
 					{
@@ -183,7 +188,7 @@
 				}
 			}
 			resetcolor();
-			for (int i = flCont.Length; i < h; i++)
+			for (int i = flCont.Count; i < h; i++)
 			{
 				for (int j = 0; j < w; j++)
 				{
@@ -220,9 +225,7 @@
 			string status = "\n";
 			int width = 80, height = 20;
 
-			flCont = new string[height];
-			flCont[0] = "Welcome to SMiTE v" + Info.version + "!";
-			for (int i = 1; i < height; i++) flCont[i] = "";
+			flCont = new() { "Welcome to SMiTE v" + Info.version + "!" };
 			
 			while (!exit)
 			{
