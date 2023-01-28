@@ -16,3 +16,17 @@
     - Places the cursor at the specified location.
   - Delete - `del <amt>`
     - Deletes a specified amount of characters starting from the cursor.
+- **Customize**
+  - Background color - `bg <color>`
+    - Sets the background color to the color specified.
+  - Foreground color - `fg <color>`
+    - Sets the foreground color to the color specified.
+  - Bar background color - `bgbar <color>`
+    - Sets the bar's background color to the color specified.
+  - Bar foreground color - `fgbar <color>`
+    - Sets the bar's foreground color to the color specified.
+- **Help**
+  - Toggle bar - `tbar`
+    - Toggles the bar's visibility.
+  - About SMiTE - `about`
+    - Shows info about SMiTE.
