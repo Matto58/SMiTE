@@ -3,7 +3,7 @@
 	public static class Info
 	{
 		public static string
-			version = "0.1";
+			version = "0.11";
 	}
 	public class BarItem
 	{
@@ -75,6 +75,16 @@
 					flCont[cursorY] = flCont[cursorY].Remove(cursorX, int.Parse(a[0])),
 				a => $"Deleted {a[0]} chars at ({cursorX},{cursorY})"),
 			} },
+			{ "Customize", new BarItem[] {
+				new("Background color", "bg", (t,i,a) => bgColor = (ConsoleColor)int.Parse(a[0]), a => $"Changed background color from {(int)bgColor2} to {(int)bgColor}"),
+				new("Foreground color", "fg", (t,i,a) => fgColor = (ConsoleColor)int.Parse(a[0]), a => $"Changed foreground color from {(int)fgColor2} to {(int)fgColor}"),
+				new("Bar background color", "bgbar", (t,i,a) => barBgColor = (ConsoleColor)int.Parse(a[0]), a => $"Changed the bar's background color from {(int)barBgColor2} to {(int)barBgColor}"),
+				new("Bar foreground color", "fgbar", (t,i,a) => barFgColor = (ConsoleColor)int.Parse(a[0]), a => $"Changed the bar's foreground color from {(int)barFgColor2} to {(int)barFgColor}"),
+			} },
+			{ "Help", new BarItem[] {
+				new("Toggle bar", "tbar", (t,i,a) => showBar = !showBar, a => $"{(showBar ? "Enabled" : "Disabled")} the bar"),
+				new("About SMiTE", "about", (t,i,a) => { }, a => $"SMiTE v{Info.version}, by Matto58, 2023"),
+			} }
 		};
 
 		static int scrollX = 0;
@@ -86,10 +96,24 @@
 		static int cursorX2 = cursorX;
 		static int cursorY2 = cursorY;
 
+		static bool showBar = true;
+
+		static ConsoleColor
+			bgColor = ConsoleColor.Blue,
+			fgColor = ConsoleColor.White,
+			barBgColor = ConsoleColor.Cyan,
+			barFgColor = ConsoleColor.Black;
+
+		static ConsoleColor
+			bgColor2 = bgColor,
+			fgColor2 = fgColor,
+			barBgColor2 = barBgColor,
+			barFgColor2 = barFgColor;
+
 		static void resetcolor()
 		{
-			Console.BackgroundColor = ConsoleColor.Blue;
-			Console.ForegroundColor = ConsoleColor.White;
+			Console.BackgroundColor = bgColor;
+			Console.ForegroundColor = fgColor;
 		}
 		static void invertcolor()
 		{
@@ -100,7 +124,8 @@
 		}
 		static void drawui(int w, int h)
 		{
-			drawbar(w);
+			Console.Clear();
+			if (showBar) drawbar(w);
 			resetcolor();
 			if (scrollY < flCont.Length)
 			{
@@ -175,9 +200,8 @@
 		}
 		static void drawbar(int w)
 		{
-			Console.Clear();
-			Console.BackgroundColor = ConsoleColor.Cyan;
-			Console.ForegroundColor = ConsoleColor.Black;
+			Console.BackgroundColor = barBgColor;
+			Console.ForegroundColor = barFgColor;
 			int w2 = 0;
 			int i = 0;
 			while (w2 < w)
