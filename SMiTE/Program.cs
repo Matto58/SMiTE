@@ -110,6 +110,8 @@
 			barBgColor2 = barBgColor,
 			barFgColor2 = barFgColor;
 
+		static Dictionary<string, string> properties = new();
+
 		static void resetcolor()
 		{
 			Console.BackgroundColor = bgColor;
@@ -224,6 +226,29 @@
 			
 			while (!exit)
 			{
+				string[] fl =
+					File.Exists("settings.txt")
+					? File.ReadAllLines("settings.txt")
+					: new string[]
+					{
+						"Bg=" + (int)bgColor,
+						"Fg=" + (int)fgColor,
+						"BgBar=" + (int)barBgColor,
+						"FgBar=" + (int)barFgColor,
+						"ShowBar=" + (showBar ? "1" : "0")
+					};
+
+				foreach (string ln in fl)
+				{
+					string[] strings = ln.Split("=");
+					properties[strings[0]] = strings[1];
+				}
+
+				bgColor = (ConsoleColor)int.Parse(properties["Bg"]);
+				fgColor = (ConsoleColor)int.Parse(properties["Fg"]);
+				barBgColor = (ConsoleColor)int.Parse(properties["BgBar"]);
+				barFgColor = (ConsoleColor)int.Parse(properties["FgBar"]);
+
 				drawui(width, height);
 				Console.ResetColor();
 				Console.WriteLine(status);
@@ -240,6 +265,15 @@
 							}
 				cursorX2 = cursorX;
 				cursorY2 = cursorY;
+
+				File.WriteAllLines("settings.txt", new string[]
+				{
+					"Bg=" + (int)bgColor,
+					"Fg=" + (int)fgColor,
+					"BgBar=" + (int)barBgColor,
+					"FgBar=" + (int)barFgColor,
+					"ShowBar=" + (showBar ? "1" : "0")
+				});
 			}
 		}
 	}
