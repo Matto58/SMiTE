@@ -3,7 +3,7 @@
 	public static class Info
 	{
 		public static string
-			version = "0.11";
+			version = "0.12";
 	}
 	public class BarItem
 	{
@@ -100,7 +100,7 @@
 		static int cursorX2 = cursorX;
 		static int cursorY2 = cursorY;
 
-		static bool showBar = true;
+		static bool showBar = true, syntaxHighlighting = true;
 
 		static ConsoleColor
 			bgColor = ConsoleColor.Blue,
@@ -238,7 +238,8 @@
 						"Fg=" + (int)fgColor,
 						"BgBar=" + (int)barBgColor,
 						"FgBar=" + (int)barFgColor,
-						"ShowBar=" + (showBar ? "1" : "0")
+						"ShowBar=" + (showBar ? "1" : "0"),
+						"SyntaxHighlighting=" + (syntaxHighlighting ? "1" : "0"),
 					};
 
 				foreach (string ln in fl)
@@ -251,6 +252,8 @@
 				fgColor = (ConsoleColor)int.Parse(properties["Fg"]);
 				barBgColor = (ConsoleColor)int.Parse(properties["BgBar"]);
 				barFgColor = (ConsoleColor)int.Parse(properties["FgBar"]);
+				showBar = properties["ShowBar"] != "0";
+				syntaxHighlighting = properties["SyntaxHighlighting"] != "0";
 
 				drawui(width, height);
 				Console.ResetColor();
